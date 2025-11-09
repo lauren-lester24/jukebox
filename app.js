@@ -17,14 +17,13 @@ app.use("/playlists", playlistsRouter);
 
 
 
-// Handles PostgreSQL errors
 app.use((err, req, res, next) => {
-  // Foreign key violation
+ 
   if (err.code === "23503") {
     return res.status(400).send(err.detail);
   }
 
-  // TODO
+  
 if (err.code === "22P02") {
   return res.status(400).send("Invalid input syntax for integer field");
 }

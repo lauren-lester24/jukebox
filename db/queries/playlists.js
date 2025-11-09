@@ -45,24 +45,8 @@ export async function createPlaylist(name, description) {
   }
 }
 
-export async function getPlaylistsWithTracks() {
-    try {
-        const sql = `
-        SELECT playlists.*, 
-                   array_agg(tracks.*) AS tracks  
-            FROM playlists
-            LEFT JOIN playlists_tracks ON playlists.id = playlists_tracks.playlist_id  
-            LEFT JOIN tracks ON playlists_tracks.track_id = tracks.id  
-            GROUP BY playlists.id;
-        `;
-        const { rows: playlists } = await db.query(sql);
-        return playlists;
-    } catch (error) {
-          console.error("Error loading playlists with tracks:", error);
-        throw error;  
-    }
+
     
-}
 
 
 export async function addTrackToPlaylist(playlistId, trackId) {
@@ -82,20 +66,15 @@ export async function addTrackToPlaylist(playlistId, trackId) {
   }
 }
 
-export async function getPlaylistByIdWithTracks(id) {
-    try {
-        const sql = `
-            SELECT playlists.*, 
-            FROM playlists
-            LEFT JOIN playlists_tracks ON playlists.id = playlists_tracks.playlist_id  
-            LEFT JOIN tracks ON playlists_tracks.track_id = tracks.id
-            WHERE playlists.id = $1  
-            GROUP BY playlists.id; 
-        `;
-        const { rows: [playlist] } = await db.query(sql, [id]);  // Execute the query with parameter
-        return playlist;  
-    } catch (error) {
-        console.error("Error fetching playlist by ID with tracks:", error);
-        throw error; 
-    }
+export async function getPlaylistById(id) {
+  const sql = `
+  SELECT tracks.*
+  FROM
+    playlists
+    JOIN playlists_tracks ON playlists.id = playlists_tracks.playlist_id  
+    JOIN tracks ON playlists_tracks.track_id = tracks.id
+  WHERE playlists.id = $1
+  `;
+  const { rows: tracks } = await db.query(sql, [id]);
+  return tracks;
 }

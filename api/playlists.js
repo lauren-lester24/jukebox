@@ -10,52 +10,46 @@ const router = express.Router();
 
 
 
-router.get("/playlists", async (req, res) => {
+router.get("/:id", async (req, res) => {
+    const playlistId = Number(req.params.id);
+    if (isNaN(playlistId)) {
+        return res.status(400).json({ error: "ID must be a number" });
+    }
+
     try {
-         const playlists = await getPlaylists();
-    res.json(playlists);
+        const playlist = await getPlaylistsById(playlistId);
+        if (!playlist) {
+            return res.status(404).json({ error: "Playlist not found" });
+        }
+        res.json(playlist);
     } catch (error) {
-        console.error("Error loading Playlist:", error);
+        console.error("Error fetching playlist by ID:", error);
         res.status(500).send("Internal Server Error");
     }
-   
 });
 
-
-router.get("/playlist/:id", async (req, res) => {
-    const { id } = req.params;
-      if (isNaN(id)) 
+router.get("/", async (req, res) => {
     try {
-        const playlist = await getPlaylistsById(id);
-        if (!playlist) {
-            return res.status(404).send("Playlist not Found");
-        }
-      res.json(playlist);
-    } catch (error) {
-        console.error("Error Fetching playlist by ID", error);
-        res.status(500).send("Internal Server Error");
-    }
-})
-
-router.get("/playlists", async (req, res) => {
-    try {
-        const playlists = await getPlaylistsWithTracks(); 
+        const playlists = await getPlaylistsWithTracks();
+        res.json(playlists);
     } catch (error) {
         console.error("Error loading playlists:", error);
         res.status(500).send("Internal Server Error");
     }
 });
 
-router.get("/playlists/:id/tracks", async (req, res) => {
-    const { id } = req.params;  
-     
-  
+router.get("/:id/tracks", async (req, res) => {
+    const playlistId = Number(req.params.id);
+    if (isNaN(playlistId)) {
+        return res.status(400).json({ error: "ID must be a number" });
+    }
+
     try {
-        const playlist = await getPlaylistByIdWithTracks(id);
+        const playlist = await getPlaylistByIdWithTracks(playlistId);
         if (!playlist) {
-            return res.status(404).send("Playlist not found"); 
+            return res.status(404).json({ error: "Playlist not found" });
         }
-        res.json(playlist); 
+        res.json(playlist);
     } catch (error) {
         console.error("Error fetching playlist by ID:", error);
         res.status(500).send("Internal Server Error");
@@ -63,7 +57,7 @@ router.get("/playlists/:id/tracks", async (req, res) => {
 });
 
 
-router.post("/playlist", async (req, res) => {
+router.post("/", async (req, res) => {
     const {name, description } = req.body;
 
     if (!name || !description) {
@@ -78,7 +72,7 @@ router.post("/playlist", async (req, res) => {
 })
 
 
-router.post("/playlists/:id/tracks", async (req, res) => {
+router.post("/:id/tracks", async (req, res) => {
   const { id } = req.params; 
   const { trackId } = req.body; 
 

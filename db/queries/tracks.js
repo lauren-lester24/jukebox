@@ -14,20 +14,15 @@ export async function getTracks() {
     }
 }
 
-export async function getTracksById(id) {
+export async function getTrackById(id) {
     try {
-        const sql = `
-        SELECT *
-        FROM tracks
-        WHERE id = $1
-        `;
-        const { rows: [tracks],
-
-        } = await query.db(sql, [id]);
-        return tracks;
+        const sql = `SELECT *
+         FROM tracks 
+         WHERE id = $1`;
+        const { rows } = await db.query(sql, [id]);
+        return rows[0]; 
     } catch (error) {
-        console.error("Error Fetching Tracks by ID", error);
+        console.error("Failure Loading Track By ID");
         throw error;
     }
-    
 }

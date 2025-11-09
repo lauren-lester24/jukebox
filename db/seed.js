@@ -1,5 +1,7 @@
 import db from "#db/client";
 
+
+
 await db.connect();
 await seed();
 await db.end();

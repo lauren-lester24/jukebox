@@ -5,7 +5,7 @@ const router = express.Router();
 
 
 
-router.get("/tracks", async (req, res) => {
+router.get("/", async (req, res) => {
     try {
             const tracks = await getTracks();
     res.json(tracks);
@@ -16,23 +16,24 @@ router.get("/tracks", async (req, res) => {
 });
 
 
- router.get("/tracks/:id", async(res,req) => {
-    const { id } = req.params;
+router.get("/:id", async (req, res) => {
+    const trackId = Number(req.params.id);
+
+    if (isNaN(trackId)) {
+        return res.status(400).json({ error: "ID must be a number" });
+    }
 
     try {
-        const track = await getTracksById(id);
-    if (!track) {
-
-     return res.statusCode(404).send("Track not found");
-    }
-    res.json(track);  
-
+        const track = await getTrackById(trackId);
+        if (!track) {
+            return res.status(404).json({ error: "Track not found" });
+        }
+        res.json(track);
     } catch (error) {
-          console.error("Error fetching track by ID:", error);
+        console.error("Error loading track:", error);
         res.status(500).send("Internal Server Error");
     }
-   
- });
+});
 
 
 

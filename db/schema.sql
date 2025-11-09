@@ -7,13 +7,13 @@ CREATE TABLE playlists (
     id serial PRIMARY KEY,
     name TEXT NOT NULL,
     description text NOT NULL
-)
+);
 
 CREATE TABLE tracks (
     id serial PRIMARY KEY,
     name TEXT NOT NULL,
     duration_ms INTEGER NOT NULL
-)
+);
 
 CREATE TABLE playlists_tracks (
     id serial PRIMARY KEY, 

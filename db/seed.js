@@ -17,7 +17,7 @@ await db.query("DELETE FROM tracks");
   ["Zingara - Solar Flare", 280000],
   ["Subtronics - Cyclops Army", 270000],
   ["Griz - Good Times Roll", 310000],
-  ["Crankdat - Booty Clap", 260000],
+  ["Crankdat - Ding Dong", 260000],
   ["TroyBoi - Afterhours", 290000],
   ["Zeds Dead - Alive", 300000],
   ["Dom Dolla - San Frandisco", 280000],

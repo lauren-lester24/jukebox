@@ -36,6 +36,10 @@ if (err.code === "22007") {
 if (err.code === "22008") {
   return res.status(400).send("Date in not in range");
 }
+
+if (err.code === "23505") {
+  return res.status(400).send("Error, this is a dublicate");
+}
   next(err);
 });
 
